@@ -1,6 +1,5 @@
-require Logger
-
 defmodule Servy.Plugins do
+    require Logger
     
     alias Servy.Conv
 
