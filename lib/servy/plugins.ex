@@ -10,12 +10,17 @@ defmodule Servy.Plugins do
     def emojify(%Conv{} = conv), do: conv
 
     def track(%Conv{status: 404, path: path} = conv) do
-        Logger.notice("Warning: #{path} is on the loose")
+        if Mix.env != :test do
+            Logger.notice("Warning: #{path} is on the loose")
+        end
         conv
     end
 
     def track(%Conv{} = conv), do: conv
 
+    def rewrite_path(%{ path: "/wildlife" } = conv) do
+        %{ conv | path: "/wildthings" }
+    end
 
     # more geneneric rewrite_path
     def rewrite_path(%Conv{path: path} = conv) do 
@@ -35,10 +40,6 @@ defmodule Servy.Plugins do
       
     def rewrite_path_captures(%Conv{} = conv, nil), do: conv
 
-    # def rewrite_path(%{ path: "/wildlife" } = conv) do
-    #     %{ conv | path: "/wildthings" }
-    # end
-
     # def rewrite_path(%{ path: "/bears?id=" <> id } = conv) do
     #     %{ conv | path: "/bears/#{id}" }
     # end
@@ -47,7 +48,9 @@ defmodule Servy.Plugins do
     # def rewrite_path(conv), do: conv
 
     def log(%Conv{} = conv) do
-        Logger.info(conv)
+        if Mix.env == :dev do
+            Logger.info(conv)
+        end
         conv
     end
 end
