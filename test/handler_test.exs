@@ -15,12 +15,12 @@ defmodule HandlerTest do
     response = handle(request)
 
     assert response == """
-    HTTP/1.1 200 OK\r
-    Content-Type: text/html\r
-    Content-Length: 20\r
-    \r
-    Bears, Lions, Tigers
-    """
+           HTTP/1.1 200 OK\r
+           Content-Type: text/html\r
+           Content-Length: 20\r
+           \r
+           Bears, Lions, Tigers
+           """
   end
 
   test "GET /bears" do
@@ -40,7 +40,7 @@ defmodule HandlerTest do
     Content-Length: 338\r
     \r
     <h1>All The Bears!</h1>
-    
+
     <ul>
       <li>Brutus - Grizzly</li>
       <li>Iceman - Polar</li>
@@ -70,12 +70,12 @@ defmodule HandlerTest do
     response = handle(request)
 
     assert response == """
-    HTTP/1.1 404 Not Found\r
-    Content-Type: text/html\r
-    Content-Length: 17\r
-    \r
-    No /bigfoot here!
-    """
+           HTTP/1.1 404 Not Found\r
+           Content-Type: text/html\r
+           Content-Length: 17\r
+           \r
+           No /bigfoot here!
+           """
   end
 
   test "GET /bears/1" do
@@ -115,12 +115,12 @@ defmodule HandlerTest do
     response = handle(request)
 
     assert response == """
-    HTTP/1.1 200 OK\r
-    Content-Type: text/html\r
-    Content-Length: 20\r
-    \r
-    Bears, Lions, Tigers
-    """
+           HTTP/1.1 200 OK\r
+           Content-Type: text/html\r
+           Content-Length: 20\r
+           \r
+           Bears, Lions, Tigers
+           """
   end
 
   test "GET /about" do
@@ -164,12 +164,12 @@ defmodule HandlerTest do
     response = handle(request)
 
     assert response == """
-    HTTP/1.1 201 Created\r
-    Content-Type: text/html\r
-    Content-Length: 32\r
-    \r
-    Created a Brown bear named Baloo
-    """
+           HTTP/1.1 201 Created\r
+           Content-Type: text/html\r
+           Content-Length: 32\r
+           \r
+           Created a Brown bear named Baloo
+           """
   end
 
   test "DELETE /bears/1" do
@@ -184,12 +184,12 @@ defmodule HandlerTest do
     response = handle(request)
 
     assert response == """
-    HTTP/1.1 403 Forbidden\r
-    Content-Type: text/html\r
-    Content-Length: 23\r
-    \r
-    You can't delete a bear
-    """
+           HTTP/1.1 403 Forbidden\r
+           Content-Type: text/html\r
+           Content-Length: 23\r
+           \r
+           You can't delete a bear
+           """
   end
 
   test "GET /api/bears" do
@@ -200,9 +200,9 @@ defmodule HandlerTest do
     Accept: */*\r
     \r
     """
-  
+
     response = handle(request)
-  
+
     expected_response = """
     HTTP/1.1 200 OK\r
     Content-Type: application/json\r
@@ -219,7 +219,7 @@ defmodule HandlerTest do
      {"type":"Polar","name":"Iceman","id":9,"hibernating":true},
      {"type":"Grizzly","name":"Kenai","id":10,"hibernating":false}]
     """
-  
+
     assert remove_whitespace(response) == remove_whitespace(expected_response)
   end
 
@@ -234,16 +234,16 @@ defmodule HandlerTest do
     \r
     {"name": "Breezly", "type": "Polar"}
     """
-  
+
     response = handle(request)
-  
+
     assert response == """
-    HTTP/1.1 201 Created\r
-    Content-Type: text/html\r
-    Content-Length: 35\r
-    \r
-    Created a Polar bear named Breezly!
-    """
+           HTTP/1.1 201 Created\r
+           Content-Type: text/html\r
+           Content-Length: 35\r
+           \r
+           Created a Polar bear named Breezly!
+           """
   end
 
   test "GET /faq" do
@@ -254,9 +254,9 @@ defmodule HandlerTest do
     Accept: */*\r
     \r
     """
-  
+
     response = handle(request)
-  
+
     expected_response = """
     HTTP/1.1 200 OK\r
     Content-Type: text/html\r
@@ -264,11 +264,11 @@ defmodule HandlerTest do
     \r
     <h1>FrequentlyAskedQuestions</h1><ul><li><p><strong>HaveyoureallyseenBigfoot?</strong></p><p>Yes!Inthis<ahref=\"https://www.youtube.com/watch?v=v77ijOO8oAk\">totallybelievablevideo</a>!</p></li><li><p><strong>No,ImeanseenBigfoot<em>ontherefuge</em>?</strong></p><p>Oh!Notyet,butwe’restilllooking…</p></li><li><p><strong>Canyoujustshowmesomecode?</strong></p><p>Sure!Here’ssomeElixir:</p><pre><codeclass=\"elixir\">[&quot;Bigfoot&quot;,&quot;Yeti&quot;,&quot;Sasquatch&quot;]|&gt;Enum.random()</code></pre></li></ul>
     """
-    assert remove_whitespace(response) == remove_whitespace(expected_response)
 
+    assert remove_whitespace(response) == remove_whitespace(expected_response)
   end
 
   defp remove_whitespace(text) do
     String.replace(text, ~r{\s}, "")
-  end 
+  end
 end
