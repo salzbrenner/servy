@@ -5,6 +5,7 @@ defmodule Servy.Handler do
 
   alias Servy.Conv
   alias Servy.BearController
+  alias Servy.VideoCam
 
   @pages_path Path.expand("../../pages", __DIR__)
 
@@ -24,6 +25,26 @@ defmodule Servy.Handler do
     |> track
     |> put_content_length
     |> format_response
+  end
+
+  def route(%Conv{method: "GET", path: "/snapshots"} = conv) do
+    # the request-handling process
+    parent = self()
+
+    spawn(fn -> send(parent, {:result, VideoCam.get_snapshot("cam-1")}) end)
+
+    snapshot1 =
+      receive do
+        {:result, value} ->
+          value
+      end
+
+    # snapshot2 = VideoCam.get_snapshot("cam-2")
+    # snapshot3 = VideoCam.get_snapshot("cam-3")
+
+    # snapshots = [snapshot1, snapshot2, snapshot3]
+
+    %{conv | status: 200, resp_body: inspect(snapshot1)}
   end
 
   def route(%Conv{method: "GET", path: "/kaboom"} = _conv) do

@@ -26,4 +26,24 @@ defmodule ServerTest do
            Bears, Lions, Tigers
            """
   end
+
+  test "accepts request and returns response using HTTPoison" do
+    _pid = spawn(HttpServer, :start, [4000])
+
+    caller = self()
+
+    max_concurrent_requests = 5
+
+    for _ <- 1..max_concurrent_requests do
+      spawn(fn -> send(caller, HTTPoison.get("http://localhost:4000/wildthings")) end)
+    end
+
+    for _ <- 1..max_concurrent_requests do
+      receive do
+        {:ok, response} ->
+          assert response.status_code == 200
+          assert response.body == "Bears, Lions, Tigers"
+      end
+    end
+  end
 end
