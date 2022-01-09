@@ -6,6 +6,7 @@ defmodule Servy.Handler do
   alias Servy.Conv
   alias Servy.BearController
   alias Servy.VideoCam
+  alias Servy.View
 
   @pages_path Path.expand("../../pages", __DIR__)
 
@@ -37,7 +38,12 @@ defmodule Servy.Handler do
 
     where_is_bigfoot = Task.await(task)
 
-    %{conv | status: 200, resp_body: inspect({snapshots, where_is_bigfoot})}
+    %{
+      conv
+      | status: 200,
+        resp_body:
+          View.render(conv, "sensors.eex", snapshots: snapshots, location: where_is_bigfoot)
+    }
   end
 
   def route(%Conv{method: "GET", path: "/kaboom"} = _conv) do

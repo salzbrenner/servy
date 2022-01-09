@@ -1,0 +1,11 @@
+<h1>Where is bigfoot</h1>
+
+
+<ul>
+<%= for shot <- snapshots do %>
+    <li><img src="<%= snapshot %>" alt="snapshot"></li>
+<% end %>    
+<li>
+<%= location %>
+</li>
+</ul>

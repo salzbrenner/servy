@@ -32,18 +32,17 @@ defmodule ServerTest do
 
     caller = self()
 
-    max_concurrent_requests = 5
+    ["wildthings", "api/bears", "hibernate/1000", "bears", "about"]
+    |> Enum.map(
+      &Task.async(fn ->
+        HTTPoison.get("http://localhost:4000/#{&1}")
+      end)
+    )
+    |> Enum.map(&Task.await/1)
+    |> Enum.map(&assert_successful_response/1)
+  end
 
-    for _ <- 1..max_concurrent_requests do
-      spawn(fn -> send(caller, HTTPoison.get("http://localhost:4000/wildthings")) end)
-    end
-
-    for _ <- 1..max_concurrent_requests do
-      receive do
-        {:ok, response} ->
-          assert response.status_code == 200
-          assert response.body == "Bears, Lions, Tigers"
-      end
-    end
+  defp assert_successful_response({:ok, response}) do
+    assert response.status_code == 200
   end
 end
